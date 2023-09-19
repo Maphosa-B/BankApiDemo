@@ -13,11 +13,14 @@ namespace BankApiDemo.Models
         [Column(TypeName = "decimal(10, 2)")]
         public decimal AvailableBalance { get; set; } = 0;
 
-        public int Status { get; set; } = 0;
+        public bool IsActive { get; set; } = true;
 
+        [Required]
+        public string AccountNumber { get; set; } = "";
 
         [ForeignKey("AccountType")]
         public int AccountTypeId { get; set; }
+
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; } = "";

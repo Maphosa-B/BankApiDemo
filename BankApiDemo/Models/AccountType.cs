@@ -13,9 +13,5 @@ namespace BankApiDemo.Models
         [MaxLength(50)]
         public string Name { get; set; } = "";
 
-
-
-        //Navigation Properties
-        public ICollection<Account> Accounts { get; set; }
     }
 }
