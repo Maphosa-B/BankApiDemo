@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankApiDemo.Migrations
 {
     [DbContext(typeof(DemoDbContext))]
-    [Migration("20230919174950_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20230919222305_Ïnitial migration")]
+    partial class Ïnitialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

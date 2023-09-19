@@ -10,7 +10,7 @@ using System.Text;
 
 namespace BankApiDemo.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthenticatonController : ControllerBase
     {
@@ -25,13 +25,14 @@ namespace BankApiDemo.Controllers
             _userManager = userManager;
             _config = config;
 
-            _key = _config.GetSection("JwtConfig:Secret").Value;
+            _key = "2b8a070cff0a4cae98c57f681eae7c51";
         }
 
         [Route("Login")]
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto requestDto)
         {
+
             //Lets check if a request is made with valid request
             if (ModelState.IsValid == false)
             {
@@ -90,21 +91,25 @@ namespace BankApiDemo.Controllers
         private string GenerateToken(IdentityUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_key);
-
-            var tokenDescriptor = new SecurityTokenDescriptor()
+            var key = Encoding.UTF8.GetBytes(_key);
+            var claims = new List<Claim>
             {
-                Subject = new System.Security.Claims.ClaimsIdentity(new[]
-                {
-                    new Claim("Id", user.Id),
-                    new Claim(JwtRegisteredClaimNames.Sub,user.Email),
-                    new Claim(JwtRegisteredClaimNames.Email,user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-                }),
-                Expires = DateTime.Now.AddMinutes(20),
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub,user.Email),
+                new Claim(JwtRegisteredClaimNames.Email,user.Email),
+                new Claim("userId", user.Id),
+            };
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddHours(1),
+                Audience = "aa",
+                Issuer = "aa",
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             };
 
+                  
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             var jwtToken = jwtTokenHandler.WriteToken(token);
 

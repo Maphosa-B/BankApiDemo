@@ -7,44 +7,42 @@ using System.Security;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
-byte[]? key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection(key: "JwtConfig:Secret").Value);
-var tokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+builder.Services.AddSwaggerGen();
+var _GetConnectionString = builder.Configuration.GetConnectionString("DefaultConnction");
+builder.Services.AddDbContext<DemoDbContext>(options => options.UseSqlServer(_GetConnectionString));
+
+// For Identity  
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<DemoDbContext>()
+                .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(x =>
 {
-    ValidateIssuerSigningKey = true,
-    IssuerSigningKey = new SymmetricSecurityKey(key),
-    ValidateIssuer = true,
-    ValidateAudience = false,
-    RequireExpirationTime = false,
-    ValidateLifetime = true,
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x => 
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = "aa",
+        ValidAudience = "aa",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("2b8a070cff0a4cae98c57f681eae7c51")),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true
+    };
+}) ;
 
-};
+builder.Services.AddAuthorization(); 
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<DemoDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-
-
-// Configure Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<DemoDbContext>()
-    .AddDefaultTokenProviders();
-
-builder.Services.AddAuthentication(opt => { opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                                            opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                                            opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-
-}).AddJwtBearer(jwt => {
-    jwt.SaveToken = true;
-    jwt.TokenValidationParameters = tokenValidationParameters;
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -55,7 +53,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 
 app.UseAuthentication();
 app.UseAuthorization();
