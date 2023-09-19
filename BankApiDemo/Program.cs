@@ -24,7 +24,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<SecurityDbContext>(options =>
+builder.Services.AddDbContext<DemoDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
@@ -32,7 +32,7 @@ builder.Services.AddDbContext<SecurityDbContext>(options =>
 
 // Configure Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<SecurityDbContext>()
+    .AddEntityFrameworkStores<DemoDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(opt => { opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

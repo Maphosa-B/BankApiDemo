@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BankApiDemo.Data
 {
-    public class SecurityDbContext : IdentityDbContext<IdentityUser>
+    public class DemoDbContext : IdentityDbContext<IdentityUser>
     {
-        public SecurityDbContext(DbContextOptions<SecurityDbContext> options) : base(options)
+        public DemoDbContext(DbContextOptions<DemoDbContext> options) : base(options)
         {
 
         }

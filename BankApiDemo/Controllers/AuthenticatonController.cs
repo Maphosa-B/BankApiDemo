@@ -10,16 +10,16 @@ using System.Text;
 
 namespace BankApiDemo.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class AuthenticatonController : ControllerBase
     {
-        private readonly SecurityDbContext _secDb;
+        private readonly DemoDbContext _secDb;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _config;
 
         private string? _key;
-        public AuthenticatonController(SecurityDbContext db, UserManager<IdentityUser> userManager, IConfiguration config)
+        public AuthenticatonController(DemoDbContext db, UserManager<IdentityUser> userManager, IConfiguration config)
         {
             _secDb = db;
             _userManager = userManager;

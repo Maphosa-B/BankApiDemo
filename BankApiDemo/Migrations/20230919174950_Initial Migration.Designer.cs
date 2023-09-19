@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankApiDemo.Migrations
 {
-    [DbContext(typeof(SecurityDbContext))]
+    [DbContext(typeof(DemoDbContext))]
     [Migration("20230919174950_Initial Migration")]
     partial class InitialMigration
     {
