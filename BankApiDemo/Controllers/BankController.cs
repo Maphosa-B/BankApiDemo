@@ -111,6 +111,15 @@ namespace BankApiDemo.Controllers
 
             //Now that all conditions are met lets widraw
             account.AvailableBalance -= data.Amount;
+
+            //Lets add a og for auditing
+            await _db.WidrawalLogs.AddAsync(new Models.WidrawalLog
+            {
+                AccountId = account.Id,
+                Amount = data.Amount,
+                AddDate = DateTime.UtcNow,
+            });
+
             var status = await _db.SaveChangesAsync();
             if(status>0)
             {

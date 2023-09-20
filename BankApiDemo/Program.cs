@@ -1,4 +1,5 @@
 using BankApiDemo.Data;
+using BankApiDemo.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ var _GetConnectionString = builder.Configuration.GetConnectionString("DefaultCon
 builder.Services.AddDbContext<DemoDbContext>(options => options.UseSqlServer(_GetConnectionString));
 
 // For Identity  
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<DemoDbContext>()
                 .AddDefaultTokenProviders();
 

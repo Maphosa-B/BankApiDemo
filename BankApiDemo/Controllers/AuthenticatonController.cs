@@ -1,6 +1,7 @@
 ﻿using BankApiDemo.Data;
 using BankApiDemo.DTOs.Requests.Authentication;
 using BankApiDemo.DTOs.Responses.Authentication;
+using BankApiDemo.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -15,11 +16,11 @@ namespace BankApiDemo.Controllers
     public class AuthenticatonController : ControllerBase
     {
         private readonly DemoDbContext _secDb;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _config;
 
         private string? _key;
-        public AuthenticatonController(DemoDbContext db, UserManager<IdentityUser> userManager, IConfiguration config)
+        public AuthenticatonController(DemoDbContext db, UserManager<ApplicationUser> userManager, IConfiguration config)
         {
             _secDb = db;
             _userManager = userManager;
@@ -32,7 +33,6 @@ namespace BankApiDemo.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto requestDto)
         {
-
             //Lets check if a request is made with valid request
             if (ModelState.IsValid == false)
             {
@@ -88,7 +88,7 @@ namespace BankApiDemo.Controllers
         /// </summary>
         /// <param name="user">Takes in a user identity</param>
         /// <returns>String of a JWT token</returns>
-        private string GenerateToken(IdentityUser user)
+        private string GenerateToken(ApplicationUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_key);

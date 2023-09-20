@@ -22,13 +22,13 @@ namespace BankApiDemo.Models
         public int AccountTypeId { get; set; }
 
 
-        [ForeignKey("IdentityUser")]
+        [ForeignKey("ApplicationUser")]
         public string IdentityUserId { get; set; } = "";
 
       
         //Navigation Properties
         public AccountType AccountType { get; set; }
-        public IdentityUser IdentityUser { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
     }
 }
